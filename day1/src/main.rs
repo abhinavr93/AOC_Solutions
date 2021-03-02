@@ -8,11 +8,12 @@ fn main() {
 
     items.sort_unstable();
 
-    for a in &items {
-        for b in &items {
-            for c in &items {
-                if a + b + c == 2020 {
-                    println!("{}\n", a * b * c);
+    for (i,a) in items.iter().enumerate() {
+        for (j,b) in items.iter().enumerate() {
+            for (k,c) in items.iter().enumerate() {
+                if a + b + c == 2020 && i != j && i != k && j != k  {
+                    println!("\n\n Items that sum to 2020 are : {}, {}, {}", a, b, c);
+                    println!("\n Their product is : {}\n", a * b * c);
                     return;
                 }
             }
