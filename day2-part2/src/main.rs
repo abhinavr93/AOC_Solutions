@@ -53,7 +53,7 @@ impl PasswordPolicyChecker {
             return true;
         }
 
-        return false;
+        false
     }
 }
 fn main() {
