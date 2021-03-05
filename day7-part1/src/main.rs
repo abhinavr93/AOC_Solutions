@@ -1,4 +1,6 @@
 use std::collections::HashMap;
+use std::collections::HashSet;
+
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -13,16 +15,12 @@ fn create_bag_rules_map() -> HashMap<String, Vec<(String, u32)>> {
 
         let color_key: String = part_iter.next().unwrap().trim().to_string();
 
-        println!("Color Key: {}", color_key);
-
-        let mut inner_part_iter = part_iter.next().unwrap().split(',');
+        let inner_part_iter = part_iter.next().unwrap().split(',');
 
         let mut bag_vec: Vec<(String, u32)> = Vec::new();
 
-        while let Some(inner_part) = inner_part_iter.next() {
+        for inner_part in inner_part_iter {
             let v: Vec<&str> = inner_part.trim().split(' ').collect();
-
-            println!("\t Split inner parts: {}, {}, {}", v[0], v[1], v[2]);
 
             if v[0] != "no" {
                 let num: u32 = v[0].parse::<u32>().unwrap();
@@ -41,33 +39,50 @@ fn create_bag_rules_map() -> HashMap<String, Vec<(String, u32)>> {
 fn get_bags_containing(
     bag_color: &str,
     bag_map: &HashMap<String, Vec<(String, u32)>>,
-) -> Option<Vec<String>> {
-    let mut return_vec: Vec<String> = Vec::new();
-    for (key, value) in bag_map.into_iter() {
+) -> Option<HashSet<String>> {
+    let mut return_set: HashSet<String> = HashSet::new();
+    for (key, value) in bag_map.iter() {
         for (color, _num) in value {
             if color.as_str() == bag_color {
-                return_vec.push(key.to_string());
+                return_set.insert(key.to_string());
             }
         }
     }
 
-    if return_vec.len() == 0 {
+    if return_set.is_empty() {
+        //Break recursion
         return None;
+    } else {
+        let current_fixed_set = return_set.clone();
+
+        for s in current_fixed_set.iter() {
+            if let Some(next_level_set) = get_bags_containing(&s, &bag_map) {
+                return_set.extend(next_level_set);
+            }
+        }
     }
 
-    Some(return_vec)
+    Some(return_set)
 }
 
 fn main() {
     let bag_map = create_bag_rules_map();
+    let check_color: &str = "shiny gold";
 
-    let mut first_level_bags = get_bags_containing("shiny gold", &bag_map).unwrap();
+    if let Some(container_bags) = get_bags_containing(check_color, &bag_map) {
+        println!(
+            "\nNumber of bags containing atleast 1 {} bag : {} which are, ",
+            check_color,
+            container_bags.len()
+        );
 
-    for s in first_level_bags {
-        println!("Shiny Gold Bag contained by: {} bag", s);
-    }
-
-    if let None = get_bags_containing("dark orange", &bag_map) {
-        println!("Dark Orange Bag contained by no bag");
+        for (i, bag_color) in container_bags.iter().enumerate() {
+            println!("{}: {}", i + 1, bag_color);
+        }
+    } else {
+        println!(
+            "\nNumber of bags containing atleast 1 {} bag : 0",
+            check_color
+        );
     }
 }
