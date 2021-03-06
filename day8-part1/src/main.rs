@@ -14,7 +14,7 @@ fn execute_instructions(mut instructions: Vec<(bool, String, i32)>) -> i32 {
 
     let mut cur_i = 0;
 
-    while !instructions[cur_i].0 {
+    while !instructions[cur_i].0 && cur_i < instructions.len() {
         println!(
             "Executing instruction at index {}: {} {}",
             cur_i, instructions[cur_i].1, instructions[cur_i].2
@@ -29,10 +29,12 @@ fn execute_instructions(mut instructions: Vec<(bool, String, i32)>) -> i32 {
             cur_i += 1;
         }
     }
-    println!(
-        "Instruction at index {}: {} {} has repeated! Exited.",
-        cur_i, instructions[cur_i].1, instructions[cur_i].2
-    );
+    if instructions[cur_i].0 && cur_i < instructions.len() {
+        println!(
+            "Instruction at index {}: {} {} has repeated! Exited.",
+            cur_i, instructions[cur_i].1, instructions[cur_i].2
+        );
+    }
     acc
 }
 
