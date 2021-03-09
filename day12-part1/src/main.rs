@@ -9,7 +9,7 @@ fn main() {
 
      while let Some(Ok(line)) = line_iter.next() {
         let c: char = line.chars().next().unwrap();
-        let val: i32 = line.split(char::is_alphabetic).nth(1).unwrap().parse::<i32>().unwrap();
+        let val: i32 = line.trim_matches(char::is_alphabetic).parse::<i32>().unwrap();
 
         println!("{}, {}",c,val);
     }
