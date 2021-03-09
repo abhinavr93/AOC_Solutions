@@ -14,7 +14,7 @@ fn rotate(vec: (i32, i32), angle: i32) -> (i32, i32) {
 		let x_val: f64 = vec.0 as f64;
 		let y_val: f64 = vec.1 as f64;
 
-		((x_val * cos - y_val * sin) as i32, (x_val * sin + y_val * cos) as i32)
+		((x_val * cos - y_val * sin).round() as i32, (x_val * sin + y_val * cos).round() as i32)
 }
 
 impl Orientation {
@@ -64,6 +64,7 @@ fn main() {
     println!("Initial -> {:?}", state);
 
      while let Some(Ok(line)) = line_iter.next() {
+
         let c: char = line.chars().next().unwrap();
         let val: i32 = line.trim_matches(char::is_alphabetic).parse::<i32>().unwrap();
 
