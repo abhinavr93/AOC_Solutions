@@ -35,7 +35,7 @@ impl Orientation {
 		let x_dir: f64 = self.dir.0 as f64;
 		let y_dir: f64 = self.dir.1 as f64;
 		
-		self.dir = ((x_dir * cos - y_dir * sin) as i32, (x_dir * sin + y_dir * cos) as i32);
+		self.dir = ((x_dir * cos - y_dir * sin).round() as i32, (x_dir * sin + y_dir * cos).round() as i32);
 	}
 
 	fn update(&mut self, c: char, val: i32) {
