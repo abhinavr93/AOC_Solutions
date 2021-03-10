@@ -48,6 +48,7 @@ fn main() {
 
 // Will be faster if prev_lcm > n2. prev_lcm is intended to be the lcm of previous values
 // and prev_time is the previously found time.
+// Set prev_time = 0 if you just want the result for two numbers which would be prev_lcm and n2.
 fn find_time_at_offset(prev_time: u64, prev_lcm: u64, n2: u64, offset: u64) -> Option<(u64, u64)> {
     let new_lcm: u64 = num::Integer::lcm(&prev_lcm, &n2);
 
